@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prompt Quiz: Persona, Template, Recipe</title>
+<style>
+:root{--bg:#f3f4fb;--panel:#ffffff;--ink:#1c1c38;--mute:#5f6280;--line:#e2e4f2;--v:#5b4bd6;--vt:#e6e3fc;--vf:#4a3bc7;--blob:#e6e3fc;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101024;--panel:#1a1a38;--ink:#eceefb;--mute:#a9abc9;--line:#2c2c52;--v:#7b6cf0;--vt:#2b2a55;--vf:#b9b2ff;--blob:#1f1d4a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101024;--panel:#1a1a38;--ink:#eceefb;--mute:#a9abc9;--line:#2c2c52;--v:#7b6cf0;--vt:#2b2a55;--vf:#b9b2ff;--blob:#1f1d4a;color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);min-height:100%}
+body{margin:0;min-height:100vh;color:var(--ink);font:17px/1.45 system-ui,Arial,sans-serif;background:radial-gradient(circle at 100% 0,var(--blob) 0,transparent 300px),radial-gradient(circle at 0 100%,var(--blob) 0,transparent 280px),var(--bg)}
+#app{max-width:1000px;margin:0 auto;padding:24px 18px 48px;display:flex;flex-direction:column;gap:18px}
+h1{font:700 clamp(34px,7vw,60px)/1.05 Georgia,serif;margin:0;text-align:center}
+h2{font:700 clamp(22px,4.5vw,36px)/1.25 Georgia,serif;margin:0}
+.sub{text-align:center;color:var(--mute);margin:0}
+.pill{align-self:flex-start;background:var(--vt);color:var(--vf);padding:8px 20px;border-radius:999px;font-weight:700;font-size:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.btn{border:0;border-radius:14px;padding:14px 22px;font:700 18px system-ui,Arial,sans-serif;background:var(--v);color:#fff;cursor:pointer}
+.btn.pri{background:var(--v);color:#fff}.btn.alt{background:var(--vt);color:var(--vf)}
+input{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)}
+.note{font-size:14px;color:var(--mute);margin:0;text-align:center}
+.bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:var(--v);border-radius:6px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;margin-bottom:8px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.opts{grid-template-columns:1fr}}
+.opt{border:0;border-radius:18px;padding:18px 16px;min-height:88px;display:flex;align-items:center;gap:14px;text-align:left;font:700 clamp(16px,3.6vw,22px)/1.25 system-ui,Arial,sans-serif;cursor:pointer;width:100%}
+.opt b{width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+.opt span{flex:1}.opt em{font-style:normal;font-size:24px}
+.dim{opacity:.3}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{background:var(--vt);color:var(--vf);padding:6px 16px;border-radius:999px;font-weight:600}
+.big{font-size:clamp(28px,7vw,52px);font-weight:800;text-align:center;font-family:Georgia,serif}
+.lb{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.lb li{display:flex;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:12px 18px;border-radius:14px;font-weight:700}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:center}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+.hl{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.hl h1{text-align:left}.lead{font-size:20px;color:var(--mute);margin:0}
+.dark{background:#14142b;border-radius:28px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:18px;color:#f3f4fb}
+.dark p{margin:0;font-size:20px;text-align:center;background:#e6e3fc;color:#1c1c38;border-radius:18px;padding:14px 18px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.menu{grid-template-columns:1fr}}
+
+#app{position:relative;z-index:1}
+body::before{content:"";position:fixed;right:18px;bottom:18px;width:110px;height:70px;background:radial-gradient(circle,#b8b2f2 3px,transparent 3.5px) 0 0/22px 22px;opacity:.7;pointer-events:none}
+body::after{content:"";position:fixed;left:0;bottom:0;width:140px;height:160px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 160'%3E%3Cpath d='M20 160C10 110 30 60 70 30c10 50-5 100-50 130z' fill='%238ea2ff' opacity='.55'/%3E%3Cpath d='M60 160C60 120 90 90 130 80c0 40-30 70-70 80z' fill='%236c5ce7' opacity='.45'/%3E%3C/svg%3E") no-repeat;pointer-events:none}
+.btn{align-self:center}.card .btn{align-self:stretch}
+.btn.go{background:linear-gradient(#2bd09a,#16a672);box-shadow:0 5px 0 #0f8a5e;border-radius:999px;padding:16px 48px;font-size:20px}
+.qb{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#1b1b55,#2c2a7a);border:3px solid #7b6cf0;border-radius:36px;padding:20px 24px}
+.qb h2{color:#fff;font:800 clamp(22px,4.4vw,38px)/1.2 system-ui,Arial,sans-serif;text-align:left;flex:1;margin:0}
+.av{width:68px;height:68px;flex:none}.robot{width:104px;flex:none}
+@media(max-width:640px){.robot{width:60px}.av{width:48px;height:48px}.qb{padding:16px;gap:12px}}
+.ans{--c:#6c5ce7;display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:2px solid color-mix(in srgb,var(--c) 45%,var(--panel));background:color-mix(in srgb,var(--c) 10%,var(--panel));border-radius:24px;padding:14px 18px;min-height:92px;color:var(--ink);font:700 clamp(17px,3.6vw,22px)/1.25 system-ui,Arial,sans-serif}
+button.ans{cursor:pointer}
+.ico{width:64px;height:64px;border-radius:32px;background:color-mix(in srgb,var(--c) 18%,var(--panel));display:flex;align-items:center;justify-content:center;flex:none}
+.dv{width:2px;align-self:stretch;margin:6px 0;background:var(--c);opacity:.55;border-radius:2px}
+.tx{flex:1}
+.mk{width:34px;height:34px;border-radius:50%;border:2px solid color-mix(in srgb,var(--c) 55%,var(--panel));flex:none;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;color:#fff}
+.mk.on{background:var(--c);border-color:var(--c)}.mk.ok{background:#1a8f5f;border-color:#1a8f5f}.mk.x{background:#c4264b;border-color:#c4264b}
+.ans.pick{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+.ans em{font-style:normal;font-size:22px;font-weight:800}
+.ans.dim{opacity:.45}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const Q=[
+{q:'Prompt pattern nima?',a:['Modelning yangi turi','Takrorlanuvchi vazifa uchun qayta ishlatiladigan prompt strukturasi','Dasturlash tili','Rasm yaratish usuli'],c:1},
+{q:'Persona patterni modelga nimani beradi?',a:['Ma’lum rol, tajriba va uslub','Faqat yangi ma’lumot','Internetga kirish','Xotira hajmini'],c:0},
+{q:'Persona patternining asosiy elementlari qaysilar?',a:['Rol, kod, ma’lumotlar bazasi','Maqom va tajriba, auditoriya, ohang','Sarlavha, rasm, jadval','Token, API, kalit'],c:1},
+{q:'Template patternida qaysi qism statik (o‘zgarmas) bo‘ladi?',a:['Foydalanuvchi matni','O‘zgaruvchi qiymatlari','Struktura, qoidalar va cheklovlar','Modelning javobi'],c:2},
+{q:'Qaysi biri o‘zgaruvchi belgilash sintaksisi EMAS?',a:['{matn}','{{user_input}}','<input></input>','#matn$'],c:3},
+{q:'Template Prompt Injection’dan qanday himoya qiladi?',a:['Javobni qisqartiradi','Tizim ko‘rsatmasi va foydalanuvchi ma’lumoti chegarasini ajratadi','Modelni o‘chiradi','Ma’lumotni shifrlaydi'],c:1},
+{q:'Recipe patternining ikki asosiy komponenti qaysi?',a:['Ingredientlar va qadamlar','Rol va ohang','Shablon va o‘zgaruvchi','Savol va javob'],c:0},
+{q:'Recipe patterni qachon eng samarali?',a:['Oddiy salomlashishda','Bitta so‘z tarjimasida','Murakkab, ketma-ket jarayonlarda (hisobot, texnik hujjat)','Rasm tanlashda'],c:2},
+{q:'Uch patternni birlashtirish tartibi qanday?',a:['Recipe → Persona → Template','Template → Recipe → Persona','Persona → Template → Recipe','Tartibning ahamiyati yo‘q'],c:2},
+{q:'Prompt patternlarining asosiy maqsadi nima?',a:['Modelni kichraytirish','Stoxastik xatti-harakatni deterministik qoliplarga solish','Javobni uzaytirish','Til o‘rgatish'],c:1}];
+const T=20,C=['#e5365f','#2f7df6','#6b4fd8','#1fa971'];
+const SHP=['<svg viewBox="0 0 40 40" width="38" height="38"><polygon points="20,6 35,33 5,33" style="fill:var(--c);stroke:var(--c)" stroke-width="4" stroke-linejoin="round"/></svg>','<svg viewBox="0 0 40 40" width="38" height="38"><rect x="10" y="10" width="20" height="20" rx="4" transform="rotate(45 20 20)" style="fill:var(--c)"/></svg>','<svg viewBox="0 0 40 40" width="38" height="38"><rect x="7" y="7" width="26" height="26" rx="5" style="fill:var(--c)"/></svg>','<svg viewBox="0 0 40 40" width="38" height="38"><circle cx="20" cy="20" r="15" style="fill:var(--c)"/></svg>'];
+const AV='<svg aria-label="Rol belgisi" viewBox="0 0 72 72"><circle cx="36" cy="36" r="33" fill="#6c5ce7" stroke="#a89cff" stroke-width="5"/><circle cx="36" cy="29" r="11" fill="#fff"/><path d="M16 58a20 18 0 0 1 40 0z" fill="#fff"/></svg>';
+const ROB='<svg aria-label="Robot" viewBox="0 0 120 130"><circle cx="18" cy="58" r="9" fill="#8ab4ff"/><circle cx="102" cy="58" r="9" fill="#8ab4ff"/><rect x="20" y="25" width="80" height="64" rx="30" fill="#fff" stroke="#cfd6ff" stroke-width="3"/><rect x="30" y="38" width="60" height="38" rx="18" fill="#1b1b55"/><path d="M44 58q6-8 12 0M64 58q6-8 12 0M54 67q6 6 12 0" stroke="#7fd0ff" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M38 92q22 10 44 0v22q-22 8-44 0z" fill="#fff" stroke="#cfd6ff" stroke-width="3"/><text x="98" y="22" font-size="26" font-weight="700" fill="#a89cff" font-family="Arial">?</text></svg>';
+const $=s=>document.querySelector(s),app=$('#app');
+let admin=true,live=true,role=null,endsAt=0,lastKey='',lastJoin=0,pin='',token=null,conn=null,err='',hostUrls=[];
+const myId=Math.random().toString(36).slice(2,12),hd={};
+const room={on:(t,f)=>{hd[t]=f},emit:(t,d)=>fetch('/api/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin,id:myId,token,topic:t,data:d})}).catch(()=>{})};
+function connect(){if(conn)conn.close();conn=new EventSource('/api/events?pin='+pin+'&id='+myId+(token?'&token='+token:''));conn.onmessage=e=>{try{const m=JSON.parse(e.data);if(hd[m.topic])hd[m.topic]({data:m.data,peer:m.peer})}catch(x){}}}
+let G={phase:'home',qi:0,board:[],counts:[0,0,0,0],n:0};
+const me={name:'',score:0,choice:null,pts:0},P=new Map();
+const pts=ms=>Math.round(1000*(1-Math.min(Math.max(ms,0),T*1000)/(T*1000)/2));
+function h(t,p,...k){const e=document.createElement(t);for(const x in p||{}){if(x==='style')e.style.cssText=p[x];else if(x.startsWith('on'))e[x]=p[x];else e.setAttribute(x,p[x])}k.flat().forEach(c=>{if(c!==null&&c!==false&&c!==undefined)e.append(c instanceof Node?c:String(c))});return e}
+const btn=(t,f,c)=>h('button',{class:'btn '+(c||''),onclick:f},t);
+const board=()=>[...P.values()].sort((a,b)=>b.score-a.score).slice(0,8).map(p=>[p.name,p.score]);
+const lb=b=>h('ul',{class:'lb'},b.map((r,i)=>h('li',{},h('span',{},(i+1)+'. '+r[0]),h('span',{},r[1]))));
+const timer=()=>h('div',{},h('div',{class:'row'},h('span',{},(G.qi+1)+' / '+Q.length),h('span',{id:'tt'},T)),h('div',{class:'bar'},h('i',{id:'tm'})));
+function pub(){if(room&&role==='host')room.emit('state',{phase:G.phase,qi:G.qi,left:Math.max(0,endsAt-Date.now()),board:G.board,counts:G.counts,n:P.size})}
+function view(){app.textContent='';app.append(role==='host'?hostView():role?playView():home())}
+function home(){const pn=h('div',{class:'dark'});pn.innerHTML='<svg aria-label="Rol berilgan mutaxassis" viewBox="0 0 320 190" width="320" height="190" style="max-width:100%"><circle cx="230" cy="95" r="80" fill="#6c5ce7"/><circle cx="230" cy="78" r="30" fill="#f3f4fb"/><path d="M178 156a52 52 0 0 1 104 0z" fill="#f3f4fb"/><circle cx="50" cy="40" r="30" fill="#e6e3fc"/><text x="50" y="50" font-size="28" font-weight="700" text-anchor="middle" fill="#4a3bc7" font-family="Arial">P</text><circle cx="62" cy="100" r="30" fill="#12b5a6"/><text x="62" y="110" font-size="28" font-weight="700" text-anchor="middle" fill="#14142b" font-family="Courier New">{}</text><circle cx="46" cy="156" r="26" fill="#f5a524"/><text x="46" y="166" font-size="26" font-weight="700" text-anchor="middle" fill="#14142b" font-family="Arial">R</text></svg>';pn.append(h('p',{},'“Sen tajribali dasturlash professori rolidasan...”'));
+const d=h('div',{style:'display:flex;flex-direction:column;gap:20px'},h('div',{class:'hero'},h('div',{class:'hl'},h('div',{class:'pill'},'Prompt patternlari I'),h('h1',{},'Prompt Quiz'),h('p',{class:'lead'},'Persona, Template va Recipe bo‘yicha bilimingizni sinab ko‘ring.')),pn));
+const m=h('div',{class:'menu'}),pi=h('input',{inputmode:'numeric',maxlength:'6',placeholder:'O‘yin kodi (PIN)'}),ni=h('input',{maxlength:'20',placeholder:'Ismingiz'});
+m.append(h('div',{class:'card'},h('div',{class:'pill'},'O‘yinga kirish'),pi,ni,btn('🎮 Kirish',()=>joinPlayer(pi.value,ni.value),'go'),err?h('p',{class:'note',style:'color:#c4264b'},err):h('p',{class:'note'},'Kodni boshqaruvchi ekranidan oling.')));
+m.append(h('div',{class:'card'},h('div',{class:'pill'},'Boshqaruvchi'),h('p',{class:'lead',style:'font-size:17px'},'Yangi o‘yin yarating va kodni auditoriyaga ko‘rsating.'),btn('🎤 O‘yin yaratish',startHost),btn('👤 Yakka o‘ynash',startSolo,'alt')));
+d.append(m);return d}
+async function startHost(){try{const r=await(await fetch('/api/create',{method:'POST'})).json();pin=r.pin;token=r.token;try{hostUrls=(await(await fetch('/api/info')).json()).urls||[]}catch(e){}}catch(e){err='Serverga ulanib bo‘lmadi';return view()}connect();role='host';P.clear();G={phase:'lobby',qi:0,board:[],counts:[0,0,0,0],n:0};pub();view()}
+function startQ(i){G.qi=i;G.phase='q';G.counts=[0,0,0,0];P.forEach(p=>p.ans=null);endsAt=Date.now()+T*1000;pub();view()}
+function reveal(){G.phase='reveal';G.board=board();pub();view()}
+function nextQ(){if(G.qi+1<Q.length)startQ(G.qi+1);else{G.phase='end';G.board=board();pub();view()}}
+function banner(q){const w=q.q.split(' '),k=Math.min(2,w.length-1),av=h('span',{class:'av'}),rb=h('span',{class:'robot'});av.innerHTML=AV;rb.innerHTML=ROB;return h('div',{class:'qb'},av,h('h2',{},w.slice(0,w.length-k).join(' ')+' ',h('span',{style:'color:#ffd166'},w.slice(-k).join(' '))),rb)}
+function opts(q,o){return h('div',{class:'opts'},q.a.map((t,i)=>{const rev=o.ok!=null&&o.ok!==undefined,sel=o.sel===i,ok=rev&&i===o.ok,bad=rev&&sel&&!ok,dim=(rev&&!ok&&!bad)||(!rev&&o.sel!=null&&!sel);
+const mark=o.counts?h('em',{},(ok?'✓ ':'')+o.counts[i]):ok?h('i',{class:'mk ok'},'✓'):bad?h('i',{class:'mk x'},'✕'):sel?h('i',{class:'mk on'},'✓'):h('i',{class:'mk'});
+const live=o.click&&o.sel==null&&!rev,e=h(live?'button':'div',{class:'ans'+(dim?' dim':'')+(ok||sel?' pick':''),style:'--c:'+C[i]}),ic=h('span',{class:'ico'});ic.innerHTML=SHP[i];e.append(ic,h('span',{class:'dv'}),h('span',{class:'tx'},t),mark);if(live)e.onclick=()=>o.click(i);return e}))}
+function hostView(){const d=h('div',{style:'display:flex;flex-direction:column;gap:18px'}),q=Q[G.qi];
+if(G.phase==='lobby'){d.append(h('h1',{},'Prompt Quiz'),h('div',{class:'card'},h('div',{class:'pill'},'O‘yin kodi (PIN)'),h('div',{class:'big',style:'letter-spacing:.2em'},pin),h('p',{class:'note'},'Ishtirokchilar quyidagi manzilga kirib, kodni va ismini yozadi:'),h('p',{class:'big',style:'font-size:clamp(18px,4vw,30px)'},(hostUrls[0]||location.origin).replace('http://',''))),h('div',{class:'chips'},[...P.values()].map(p=>h('span',{class:'chip'},p.name))),h('p',{class:'sub'},P.size+' ishtirokchi'),btn('Boshlash →',()=>startQ(0),'go'));return d}
+if(G.phase==='end'){d.append(h('h1',{},'🏆 G‘oliblar'),lb(G.board),btn('Bosh sahifa',stop,'alt'));return d}
+const rv=G.phase==='reveal';d.append(h('div',{class:'pill'},'Savol '+(G.qi+1)+' / '+Q.length),banner(q));
+if(!rv)d.append(timer(),h('p',{class:'sub'},[...P.values()].filter(p=>p.ans!==null).length+' / '+P.size+' javob berdi'));
+d.append(opts(q,{sel:null,ok:rv?q.c:null,counts:rv?G.counts:null}));
+if(rv)d.append(lb(G.board.slice(0,5)),btn((G.qi+1<Q.length?'Keyingi savol':'Natijalar')+' →',nextQ,'go'));else d.append(btn('Hozir ko‘rsatish',reveal,'alt'));
+return d}
+function stop(){if(conn)conn.close();conn=null;err='';role=null;G.phase='home';P.clear();view()}
+async function joinPlayer(p,n){p=(p||'').trim();try{const r=await(await fetch('/api/check?pin='+encodeURIComponent(p))).json();if(!r.ok){err='Bunday kodli o‘yin topilmadi';return view()}}catch(e){err='Serverga ulanib bo‘lmadi';return view()}err='';pin=p;token=null;me.name=(n||'').trim()||'Ishtirokchi';me.score=0;role='player';G.phase='lobby';lastKey='';connect();room.emit('join',{name:me.name});view()}
+function startSolo(){role='solo';me.score=0;soloQ(0)}
+function soloQ(i){G.qi=i;G.phase='q';me.choice=null;me.pts=0;endsAt=Date.now()+T*1000;view()}
+function soloNext(){if(G.qi+1<Q.length)soloQ(G.qi+1);else{G.phase='end';view()}}
+function answer(c){if(me.choice!==null||G.phase!=='q')return;const ms=T*1000-(endsAt-Date.now());me.choice=c;me.pts=c===Q[G.qi].c?pts(ms):0;me.score+=me.pts;if(role==='player')room.emit('answer',{qi:G.qi,c,ms});if(role==='solo')G.phase='reveal';view()}
+function playView(){const d=h('div',{style:'display:flex;flex-direction:column;gap:18px'}),q=Q[G.qi];
+if(G.phase==='lobby'){d.append(h('h1',{},'Siz ichkaridasiz!'),h('p',{class:'sub'},me.name+', o‘yin boshlanishini kuting…'));return d}
+if(G.phase==='end'){d.append(h('h1',{},'O‘yin tugadi'),h('div',{class:'big'},me.score+' ball'));if(role==='player')d.append(lb(G.board));d.append(btn(role==='solo'?'Qayta o‘ynash':'Bosh sahifa',role==='solo'?startSolo:stop,'alt'));return d}
+d.append(h('div',{class:'pill'},'Savol '+(G.qi+1)+' / '+Q.length),banner(q));
+if(G.phase==='q'){d.append(timer(),opts(q,{sel:me.choice,click:answer}));if(me.choice!==null)d.append(h('p',{class:'sub'},'Javob qabul qilindi ✓ Natijani kuting…'));return d}
+const ok=me.choice===q.c;
+d.append(h('div',{class:'big'},me.choice===null?'⏱ Vaqt tugadi':ok?'✅ To‘g‘ri! +'+me.pts:'❌ Noto‘g‘ri'),opts(q,{sel:me.choice,ok:q.c}),h('div',{class:'big'},me.score+' ball'));
+const r=G.board.findIndex(b=>b[0]===me.name);if(role==='player'&&r>=0)d.append(h('p',{class:'sub'},'Reytingda '+(r+1)+'-o‘rin'));
+if(role==='solo')d.append(btn((G.qi+1<Q.length?'Keyingi savol':'Natija')+' →',soloNext,'go'));else d.append(h('p',{class:'note'},'Boshqaruvchi keyingi savolni ochishini kuting…'));
+return d}
+setInterval(()=>{const left=endsAt-Date.now(),m=$('#tm');if(G.phase==='q'&&m){m.style.width=Math.max(0,left/(T*1000)*100)+'%';$('#tt').textContent=Math.max(0,Math.ceil(left/1000))}
+if(role==='host'&&G.phase==='q'&&(left<=0||(P.size&&[...P.values()].every(p=>p.ans!==null))))reveal();
+if(role==='solo'&&G.phase==='q'&&left<=0){G.phase='reveal';view()}},250);
+setInterval(pub,2500);
+function wire(){
+room.on('join',m=>{if(role!=='host')return;const n=String((m.data||{}).name||'Ishtirokchi').slice(0,20);if(!P.has(m.peer)){P.set(m.peer,{name:n,score:0,ans:null});if(G.phase==='lobby')view();pub()}else P.get(m.peer).name=n});
+room.on('answer',m=>{if(role!=='host'||G.phase!=='q')return;const d=m.data||{},p=P.get(m.peer),c=Number(d.c);if(!p||p.ans!==null||d.qi!==G.qi||!(c>=0&&c<4))return;p.ans=c;G.counts[c]++;if(c===Q[G.qi].c)p.score+=pts(Number(d.ms)||0);view()});
+room.on('state',m=>{if(role!=='player')return;const d=m.data||{};if(!d.phase)return;const nq=d.phase==='q'&&(G.phase!=='q'||G.qi!==d.qi);G={phase:d.phase,qi:d.qi|0,board:d.board||[],counts:d.counts||[0,0,0,0],n:d.n|0};
+if(nq){me.choice=null;me.pts=0;endsAt=Date.now()+(d.left||T*1000)}
+if(Date.now()-lastJoin>5000){lastJoin=Date.now();room.emit('join',{name:me.name})}
+const k=G.phase+G.qi;if(k!==lastKey||G.phase==='lobby'){lastKey=k;view()}})}
+wire();view();
+</script>
+</body>
+</html>
